@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+
+body {
+  font: 12px sans-serif;
+}
+
+.axis path,
+.axis line {
+  fill: none;
+  stroke: #aaa;
+  shape-rendering: crispEdges;
+}
+
+path.zone {
+  fill: rgb(255, 197, 34);
+  stroke: #e19c26;
+  stroke-width: 2px;
+}
+
+text.zone {
+  font: 18px sans-serif;
+  fill: #996916;
+}
+
+.avg {
+  fill: steelblue;
+}
+
+</style>
+<body>
+<script src="http://d3js.org/d3.v3.js"></script>
+<script>
+
+var margin = {top: 20, right: 20, bottom: 30, left: 50},
+    width = 800 - margin.left - margin.right,
+    height = 800 - margin.top - margin.bottom;
+
+var x = d3.scale.linear()
+    .range([0, width]);
+
+var y = d3.scale.linear()
+    .range([height, 0]);
+
+var xAxis = d3.svg.axis()
+    .scale(x)
+    .orient("bottom");
+
+var yAxis = d3.svg.axis()
+    .scale(y)
+    .orient("left");
+
+var svg = d3.select("body").append("svg")
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom)
+  .append("g")
+    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+x.domain([0, 100]);
+y.domain([30, 120]);
+
+svg.append("g")
+    .attr("class", "x axis")
+    .attr("transform", "translate(0," + height + ")")
+    .call(xAxis)
+  .append("text")
+    .attr("x", width)
+    .attr("dy", "-.71em")
+    .style("text-anchor", "end")
+    .text("Relative Humidity");
+
+svg.append("g")
+    .attr("class", "y axis")
+    .call(yAxis)
+  .append("text")
+    .attr("transform", "rotate(-90)")
+    .attr("y", 6)
+    .attr("dy", ".71em")
+    .style("text-anchor", "end")
+    .text("Temperature (F)");
+
+svg.append("path")
+  .attr("class", "zone")
+  .attr("d", "M" + [x(14), y(83)] + "L" + [x(48), y(83)] +
+             "L" + [x(70), y(72)] + "A" + [x(5),  x(5)] + " 0 0,1 " + [x(70), y(64)] +
+             "L" + [x(52), y(69)] + "L" + [x(14), y(69)] +
+             "A" + [x(5), x(5)] + " 0 0,1 " + [x(9), y(72)] +
+             "L" + [x(9), y(80)] +
+             "A" + [x(5), x(5)] + " 0 0,1 " + [x(14), y(83)]);
+
+svg.append("text")
+  .attr("class", "zone")
+  .attr("transform", "translate(" + [x(35), y(75)] + ")")
+  .style("text-anchor", "middle")
+  .text("Comfort Zone");
+
+svg.append("path")
+  .attr("class", "avg")
+  .attr("transform", "translate(" + [x(68), + y(63)] + ")")
+  .attr("d", d3.svg.symbol()
+    .type('circle')
+    .size(250));
+
+</script>
+</body>
